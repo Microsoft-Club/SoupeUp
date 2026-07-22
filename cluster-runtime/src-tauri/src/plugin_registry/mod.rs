@@ -93,7 +93,7 @@ impl PluginRegistry {
                 version: "0.1.0".to_string(),
                 status: PluginStatus::Initializing,
                 author: "Cluster Runtime Team".to_string(),
-                description: "Embedded Python 3.13 runtime with virtual environment, \
+                description: "Embedded Python 3.10 runtime with virtual environment, \
                                package management, and code execution."
                     .to_string(),
                 capabilities: vec![
@@ -127,6 +127,56 @@ impl PluginRegistry {
                     "Task Submission".to_string(),
                     "Cluster Monitoring".to_string(),
                     "Dashboard Integration".to_string(),
+                ],
+                plugin_type: "Scheduler".to_string(),
+            },
+        );
+    }
+
+    /// Register the Ray Plugin (starts as Initializing until packages are ready).
+    pub fn register_ray(&mut self) {
+        let id = "plugin-ray".to_string();
+        self.info.insert(
+            id.clone(),
+            PluginInfo {
+                id,
+                name: "Ray".to_string(),
+                version: "0.1.0".to_string(),
+                status: PluginStatus::Initializing,
+                author: "Cluster Runtime Team".to_string(),
+                description: "Distributed computing via Ray.io. Uses the Python Runtime \
+                               Plugin for all execution and package management."
+                    .to_string(),
+                capabilities: vec![
+                    "Distributed Scheduling".to_string(),
+                    "Distributed Workers".to_string(),
+                    "Task Submission".to_string(),
+                    "Cluster Monitoring".to_string(),
+                    "Dashboard Integration".to_string(),
+                ],
+                plugin_type: "Scheduler".to_string(),
+            },
+        );
+    }
+
+    /// Register the MPI Plugin (native mpirun/mpiexec; independent of Python).
+    pub fn register_mpi(&mut self) {
+        let id = "plugin-mpi".to_string();
+        self.info.insert(
+            id.clone(),
+            PluginInfo {
+                id,
+                name: "MPI".to_string(),
+                version: "0.1.0".to_string(),
+                status: PluginStatus::Initializing,
+                author: "Cluster Runtime Team".to_string(),
+                description: "Message Passing Interface jobs via mpirun/mpiexec \
+                               (OpenMPI, MPICH, or Microsoft MPI)."
+                    .to_string(),
+                capabilities: vec![
+                    "MPI Launch".to_string(),
+                    "Multi-rank Jobs".to_string(),
+                    "Process Group Cancel".to_string(),
                 ],
                 plugin_type: "Scheduler".to_string(),
             },

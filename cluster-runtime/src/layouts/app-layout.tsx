@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 import { Sidebar } from "@/components/sidebar";
-import { useDaskStore, useMetricsStore } from "@/stores";
+import { UpdateBanner } from "@/components/update-banner";
+import { useDaskStore, useMetricsStore, useRayStore } from "@/stores";
 
 interface PageHeaderProps {
   title: string;
@@ -28,25 +29,31 @@ export function AppLayout() {
   const fetchMetrics = useMetricsStore((s) => s.fetchMetrics);
   const appendAnimatedPoint = useMetricsStore((s) => s.appendAnimatedPoint);
   const fetchDaskMetrics = useDaskStore((s) => s.fetchMetrics);
+  const fetchRayMetrics = useRayStore((s) => s.fetchMetrics);
 
   useEffect(() => {
     void fetchMetrics();
     void fetchDaskMetrics();
+    void fetchRayMetrics();
     const interval = window.setInterval(() => {
       appendAnimatedPoint();
       void fetchDaskMetrics();
+      void fetchRayMetrics();
     }, 2000);
     return () => window.clearInterval(interval);
-  }, [fetchMetrics, appendAnimatedPoint, fetchDaskMetrics]);
+  }, [fetchMetrics, appendAnimatedPoint, fetchDaskMetrics, fetchRayMetrics]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar />
-      <main className="flex-1 overflow-y-auto scrollbar-thin">
-        <div className="mx-auto max-w-7xl p-8">
-          <Outlet />
-        </div>
-      </main>
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <UpdateBanner />
+        <main className="flex-1 overflow-y-auto scrollbar-thin">
+          <div className="mx-auto max-w-7xl p-8">
+            <Outlet />
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
